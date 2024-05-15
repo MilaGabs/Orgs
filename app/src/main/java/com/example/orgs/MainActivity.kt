@@ -1,6 +1,7 @@
 package com.example.orgs
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,10 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        var nome = findViewById<TextView>(R.id.nome)
+        nome.text = "Cesta de frutas"
+
+        var descricao = findViewById<TextView>(R.id.descricao)
+        descricao.text = "Laranja, manga e maçã"
+
+        var valor = findViewById<TextView>(R.id.valor)
+        valor.text = "19.99"
     }
 }
