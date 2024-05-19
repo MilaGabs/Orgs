@@ -13,7 +13,7 @@
         tools:context=".ui.activity.ProductFormActivity">
 
         <EditText
-            android:id="@+id/nome"
+            android:id="@+id/product_form_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Nome"
@@ -24,26 +24,27 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <EditText
-            android:id="@+id/descricao"
+            android:id="@+id/product_form_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Descrição"
             android:inputType="text"
-            app:layout_constraintStart_toStartOf="@id/nome"
-            app:layout_constraintTop_toBottomOf="@id/nome"
-            app:layout_constraintEnd_toEndOf="@id/nome"/>
+            app:layout_constraintStart_toStartOf="@id/product_form_name"
+            app:layout_constraintTop_toBottomOf="@id/product_form_name"
+            app:layout_constraintEnd_toEndOf="@id/product_form_name"/>
 
         <EditText
-            android:id="@+id/valor"
+            android:id="@+id/product_form_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Valor"
             android:inputType="numberDecimal"
-            app:layout_constraintStart_toStartOf="@id/descricao"
-            app:layout_constraintTop_toBottomOf="@id/descricao"
-            app:layout_constraintEnd_toEndOf="@id/descricao"/>
+            app:layout_constraintStart_toStartOf="@id/product_form_description"
+            app:layout_constraintTop_toBottomOf="@id/product_form_description"
+            app:layout_constraintEnd_toEndOf="@id/product_form_description"/>
 
         <Button
+            android:id="@+id/product_form_save_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -52,7 +53,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/valor" />
+            app:layout_constraintTop_toBottomOf="@+id/product_form_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
