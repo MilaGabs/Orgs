@@ -1,30 +1,28 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.orgs.R
 import com.example.orgs.dao.ProductDao
+import com.example.orgs.databinding.ActivityProductFormBinding
 import com.example.orgs.model.Product
 import java.math.BigDecimal
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
 
+    private val binding by lazy {
+        ActivityProductFormBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupSaveButton()
+        setContentView(binding.root)
     }
 
     private fun setupSaveButton() {
-        val saveButton = findViewById<Button>(R.id.product_form_save_button)
+        val saveButton = binding.productFormSaveButton
         saveButton.setOnClickListener {
             val newProduct = product()
             val dao = ProductDao()
@@ -34,13 +32,13 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     }
 
     private fun product(): Product {
-        val nameField = findViewById<EditText>(R.id.product_form_name)
+        val nameField = binding.productFormName
         val name = nameField.text.toString()
 
-        val descField = findViewById<EditText>(R.id.product_form_description)
+        val descField = binding.productFormDescription
         val description = descField.text.toString()
 
-        val valueField = findViewById<EditText>(R.id.product_form_value)
+        val valueField = binding.productFormValue
         val textValue = valueField.text.toString()
 
         val value = if (textValue.isBlank()) {

@@ -4,21 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.example.orgs.R
 import com.example.orgs.dao.ProductDao
+import com.example.orgs.databinding.ActivityProductListBinding
 import com.example.orgs.ui.recyclerview.adapter.ProductsListAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
     private val dao = ProductDao()
     private val adapter = ProductsListAdapter(context = this, products = dao.getAll())
+
+    private val binding by lazy {
+        ActivityProductListBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setupRecyclerView()
         setupFab()
+        setContentView(binding.root)
     }
 
     override fun onResume() {
@@ -27,7 +31,7 @@ class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
     }
 
     private fun setupFab() {
-        val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        val fab = binding.floatingActionButton
         fab.setOnClickListener {
             navigateToProductForm()
         }
@@ -39,7 +43,7 @@ class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
     }
 
     private fun setupRecyclerView() {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         // utilizamos a linha a seguir para que os itens sejam exibidos no list view, sem isso nada acontece
         // podemos configura-lo tanto aqui quanto no arquivo de layout

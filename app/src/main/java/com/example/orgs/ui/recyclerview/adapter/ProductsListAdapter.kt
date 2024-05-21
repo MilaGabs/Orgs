@@ -2,12 +2,13 @@ package com.example.orgs.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orgs.R
+import com.example.orgs.databinding.ItemProductBinding
 import com.example.orgs.model.Product
+import java.math.BigDecimal
+import java.text.NumberFormat
+import java.util.Locale
 
 class ProductsListAdapter(
     products: List<Product>,
@@ -16,22 +17,28 @@ class ProductsListAdapter(
 
     private val products = products.toMutableList()
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        private val name = binding.productItemName
+        private val description = binding.productItemDescription
+        private val value = binding.productItemValue
+
         fun bind(product: Product) {
-            val nome = itemView.findViewById<TextView>(R.id.product_item_name)
-            nome.text = product.name
-            val descricao = itemView.findViewById<TextView>(R.id.product_item_description)
-            descricao.text = product.description
-            val valor = itemView.findViewById<TextView>(R.id.product_item_value)
-            valor.text = product.value.toPlainString()
+            name.text = product.name
+            description.text = product.description
+            value.text = formatToBrCurrency(product.value)
+        }
+
+        private fun formatToBrCurrency(value: BigDecimal): String {
+            val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            return formatter.format(value)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // referencia do android para criar uma "view exclusiva"
-        val inflate = LayoutInflater.from(context)
-        val view = inflate.inflate(R.layout.item_product, parent, false)
-        return ViewHolder(view)
+        val binding = ItemProductBinding.inflate(LayoutInflater.from(context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int = products.size
