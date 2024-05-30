@@ -4,7 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.orgs.R
 import com.example.orgs.databinding.ItemProductBinding
+import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -22,11 +25,13 @@ class ProductsListAdapter(
         private val name = binding.productItemName
         private val description = binding.productItemDescription
         private val value = binding.productItemValue
+        private val image = binding.imageView
 
         fun bind(product: Product) {
             name.text = product.name
             description.text = product.description
             value.text = formatToBrCurrency(product.value)
+            image.tryToLoadImage(product.image)
         }
 
         private fun formatToBrCurrency(value: BigDecimal): String {

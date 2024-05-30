@@ -1,11 +1,16 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.example.orgs.R
 import com.example.orgs.dao.ProductDao
 import com.example.orgs.databinding.ActivityProductFormBinding
+import com.example.orgs.databinding.ImageFormBinding
+import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
+import com.example.orgs.ui.dialog.ImageFormDialog
 import java.math.BigDecimal
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
@@ -14,11 +19,20 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
 
+    private var url: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupSaveButton()
         setContentView(binding.root)
+        title = "Cadastrar produto"
+        binding.productFormImage.setOnClickListener {
+            ImageFormDialog(this).show(url) { image ->
+                url = image
+                binding.productFormImage.tryToLoadImage(url)
+            }
+        }
     }
 
     private fun setupSaveButton() {
@@ -50,7 +64,8 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         return Product(
             name = name,
             description = description,
-            value = value
+            value = value,
+            image = url
         )
     }
 

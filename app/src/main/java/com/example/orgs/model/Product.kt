@@ -6,5 +6,6 @@ import java.math.BigDecimal
 data class Product(
     val name: String,
     val description: String,
-    val value: BigDecimal // Similar to double but with a big precision
+    val value: BigDecimal, // Similar to double but with a big precision
+    val image: String? = null
 )
