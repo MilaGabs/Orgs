@@ -15,19 +15,29 @@ import java.util.Locale
 
 class ProductsListAdapter(
     products: List<Product>,
-    private var context: Context
+    private var context: Context,
+    var whenItemClicked: (product: Product) -> Unit = {}
 ) : RecyclerView.Adapter<ProductsListAdapter.ViewHolder>() {
 
     private val products = products.toMutableList()
 
-    class ViewHolder(binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private val name = binding.productItemName
         private val description = binding.productItemDescription
         private val value = binding.productItemValue
         private val image = binding.imageView
+        private lateinit var product: Product
+        init {
+            itemView.setOnClickListener {
+                if (::product.isInitialized) {
+                    whenItemClicked(product)
+                }
+            }
+        }
 
         fun bind(product: Product) {
+            this.product = product
             name.text = product.name
             description.text = product.description
             value.text = formatToBrCurrency(product.value)
