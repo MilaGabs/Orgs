@@ -1,13 +1,10 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import coil.load
 import com.example.orgs.R
 import com.example.orgs.dao.ProductDao
 import com.example.orgs.databinding.ActivityProductFormBinding
-import com.example.orgs.databinding.ImageFormBinding
 import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
 import com.example.orgs.ui.dialog.ImageFormDialog
