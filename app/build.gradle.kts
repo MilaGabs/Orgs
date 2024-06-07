@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt") version "2.0.0"
 }
 
 android {
@@ -51,4 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("io.coil-kt:coil:2.6.0")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 }

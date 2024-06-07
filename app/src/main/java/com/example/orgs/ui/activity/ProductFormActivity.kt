@@ -3,20 +3,23 @@ package com.example.orgs.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
-import com.example.orgs.dao.ProductDao
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityProductFormBinding
 import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
 import com.example.orgs.ui.dialog.ImageFormDialog
-import java.math.BigDecimal
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
 
     private val binding by lazy {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
+    private val productDao by lazy {
+        AppDatabase.instance(this).productDao()
+    }
 
     private var url: String? = null
+    private var productId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +33,36 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
                 binding.productFormImage.tryToLoadImage(url)
             }
         }
+
+        tryToLoadProduct()
+    }
+
+    private fun tryToLoadProduct() {
+        productId = intent.getIntExtra("productId", 0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        productDao.searchById(productId)?.let {
+            fillFields(it)
+        }
+    }
+
+    private fun fillFields(loadedProduct: Product) {
+        title = "Editar produto"
+        binding.productFormName.setText(loadedProduct.name)
+        binding.productFormDescription.setText(loadedProduct.description)
+        binding.productFormValue.setText(loadedProduct.value.toString())
+        url = loadedProduct.image
+        binding.productFormImage.tryToLoadImage(url)
     }
 
     private fun setupSaveButton() {
         val saveButton = binding.productFormSaveButton
         saveButton.setOnClickListener {
             val newProduct = product()
-            val dao = ProductDao()
-            dao.add(newProduct)
+            productDao.save(newProduct)
+
             finish()
         }
     }
@@ -53,12 +78,13 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         val textValue = valueField.text.toString()
 
         val value = if (textValue.isBlank()) {
-            BigDecimal.ZERO
+            0.0
         } else {
-            BigDecimal(textValue)
+            textValue.toDouble()
         }
 
         return Product(
+            id = productId,
             name = name,
             description = description,
             value = value,

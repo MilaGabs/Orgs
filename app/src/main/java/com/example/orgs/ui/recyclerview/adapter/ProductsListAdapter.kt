@@ -14,7 +14,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class ProductsListAdapter(
-    products: List<Product>,
+    products: List<Product> = emptyList(),
     private var context: Context,
     var whenItemClicked: (product: Product) -> Unit = {}
 ) : RecyclerView.Adapter<ProductsListAdapter.ViewHolder>() {
@@ -44,7 +44,7 @@ class ProductsListAdapter(
             image.tryToLoadImage(product.image)
         }
 
-        private fun formatToBrCurrency(value: BigDecimal): String {
+        private fun formatToBrCurrency(value: Double): String {
             val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             return formatter.format(value)
         }

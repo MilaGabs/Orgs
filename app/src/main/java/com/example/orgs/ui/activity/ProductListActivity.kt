@@ -5,14 +5,12 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orgs.R
-import com.example.orgs.dao.ProductDao
+import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityProductListBinding
-import com.example.orgs.model.Product
 import com.example.orgs.ui.recyclerview.adapter.ProductsListAdapter
 
 class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
-    private val dao = ProductDao()
-    private val adapter = ProductsListAdapter(context = this, products = dao.getAll())
+    private val adapter = ProductsListAdapter(context = this)
 
     private val binding by lazy {
         ActivityProductListBinding.inflate(layoutInflater)
@@ -28,7 +26,9 @@ class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
 
     override fun onResume() {
         super.onResume()
-        adapter.update(dao.getAll())
+        val db = AppDatabase.instance(this)
+        val productDao = db.productDao()
+        adapter.update(productDao.searchAll())
     }
 
     private fun setupFab() {
@@ -54,7 +54,7 @@ class ProductListActivity : AppCompatActivity(R.layout.activity_product_list) {
                 this,
                 ProductDetailActivity::class.java
             ).apply {
-                putExtra<Product>("product", it)
+                putExtra("productId", it.id)
             }
             startActivity(intent)
         }
