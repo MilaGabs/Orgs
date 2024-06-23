@@ -2,12 +2,14 @@ package com.example.orgs.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityProductFormBinding
 import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
 import com.example.orgs.ui.dialog.ImageFormDialog
+import kotlinx.coroutines.launch
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
 
@@ -43,8 +45,10 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
 
     override fun onResume() {
         super.onResume()
-        productDao.searchById(productId)?.let {
-            fillFields(it)
+        lifecycleScope.launch {
+            productDao.searchById(productId)?.let {
+                fillFields(it)
+            }
         }
     }
 
@@ -60,10 +64,11 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     private fun setupSaveButton() {
         val saveButton = binding.productFormSaveButton
         saveButton.setOnClickListener {
-            val newProduct = product()
-            productDao.save(newProduct)
-
-            finish()
+            lifecycleScope.launch {
+                val newProduct = product()
+                productDao.save(newProduct)
+                finish()
+            }
         }
     }
 

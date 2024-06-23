@@ -5,11 +5,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
 import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityProductDetailBinding
 import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -36,10 +43,12 @@ class ProductDetailActivity : AppCompatActivity(R.layout.activity_product_detail
     }
 
     private fun searchForProduct() {
-        product = productDao.searchById(productId)
-        product?.let {
-            loadProduct()
-        } ?: finish()
+        lifecycleScope.launch {
+            product = productDao.searchById(productId)
+            product?.let {
+                loadProduct()
+            } ?: finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -60,8 +69,10 @@ class ProductDetailActivity : AppCompatActivity(R.layout.activity_product_detail
             }
 
             R.id.menu_delete_product_details -> {
-                product?.let { productDao.delete(it) }
-                finish()
+                lifecycleScope.launch {
+                    product?.let { productDao.delete(it) }
+                    finish()
+                }
             }
         }
 
