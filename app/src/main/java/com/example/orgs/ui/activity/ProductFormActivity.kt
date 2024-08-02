@@ -1,6 +1,7 @@
 package com.example.orgs.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.orgs.R
@@ -8,6 +9,8 @@ import com.example.orgs.database.AppDatabase
 import com.example.orgs.databinding.ActivityProductFormBinding
 import com.example.orgs.extensions.tryToLoadImage
 import com.example.orgs.model.Product
+import com.example.orgs.preferences.dataStore
+import com.example.orgs.preferences.loggedUserKey
 import com.example.orgs.ui.dialog.ImageFormDialog
 import kotlinx.coroutines.launch
 
@@ -18,6 +21,9 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     }
     private val productDao by lazy {
         AppDatabase.instance(this).productDao()
+    }
+    private val userDao by lazy {
+        AppDatabase.instance(this).userDao()
     }
 
     private var url: String? = null
@@ -37,6 +43,16 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         }
 
         tryToLoadProduct()
+
+        lifecycleScope.launch {
+            dataStore.data.collect {preferences ->
+                preferences[loggedUserKey]?.let {
+                    userDao.getUser(it).collect { user ->
+                        Log.i("ProductFormActivity", "onCreate: $user")
+                    }
+                }
+            }
+        }
     }
 
     private fun tryToLoadProduct() {
